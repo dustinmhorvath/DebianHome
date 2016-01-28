@@ -12,32 +12,31 @@
 *        Configuration
 *   +------------------------------------------------------------------------------+
 */
-$root_partition = chop(` df | grep /$ | awk {'print $(NF-5)'} `);
 // Leave secondary empty if you don't have another mount that you want to watch.
 $secondary = "";
 // Put the domain of sites for top bar here. You might need to specify these
 //  below if your configuration is more complicated.
 $domain = "nichnologist.net";
 
-
 // Define service checks
 $services = Array(
-	Array("80", 				"Internet Connection", 						"google.com"),
-	Array("80",				"HTTP", 							""),
-//	Array("postfix",		 	"Postfix", 							""),
-	Array("cron",				"Cron",								""),
-//	Array("3306", 				"MySQL", 							""),
-	Array("445",				"Samba", 							""),
-//	Array("32400",				"Plex",								"localhost"),
-//	Array("21", 				"FTP", 								""),
-	Array("22", 				"Internal SSH", 						""),
-	Array("22", 				"External SSH", 						"$hostname"),
-//	Array("transmission",			"Transmission", 						""),
-	Array("3389",		 	        "XRDP (Remote Desktop)",		 			""),
-	Array("apache2",			"Apache2",							""),
-	Array("openvpn",			"Openvpn",							""),
-//	Array("631",                        	"CUPS", 							""),
+	Array("80", 				"Internet Connection", 				"google.com"),
+	Array("80",				"HTTP", 					""),
+//	Array("postfix",		 	"Postfix", 					""),
+	Array("cron",				"Cron",						""),
+//	Array("3306", 				"MySQL", 					""),
+	Array("445",				"Samba", 					""),
+//	Array("32400",				"Plex",						"localhost"),
+//	Array("21", 				"FTP", 						""),
+	Array("22", 				"Internal SSH", 				""),
+	Array("22", 				"External SSH", 				"$hostname"),
+//	Array("transmission",			"Transmission", 				""),
+	Array("3389",		 	        "XRDP (Remote Desktop)",			""),
+	Array("apache2",			"Apache2",					""),
+	Array("openvpn",			"Openvpn",					""),
+//	Array("631",                        	"CUPS", 					""),
 );
+
 // Define Header Links
 $links = Array(
 	Array("Transmission",			"http:/\/torrent.$domain"),
@@ -51,6 +50,7 @@ $links = Array(
 
 //Temperature readouts -- enter C or F (Default: C)
 $degtype = "F";
+$root_partition = chop(` df | grep /$ | awk {'print $(NF-5)'} `);
 $hostname = gethostname();
 
 function microtime_float()
@@ -97,45 +97,30 @@ foreach ($services as $service) {
 $loadresult = @exec('uptime');
 preg_match("/averages?: ([0-9\.]+),[\s]+([0-9\.]+),[\s]+([0-9\.]+)/",$loadresult,$avgs);
 
-
 //GET SERVER UPTIME
-  $uptime = explode(' up ', $loadresult);
-  $uptime = explode(',', $uptime[1]);
-  $uptime = $uptime[0].', '.$uptime[1];
-
-$data1 = "<tr><td>Load Average </td><td>$avgs[1], $avgs[2], $avgs[3]</td>\n";
-$data1 .= "<tr><td>Server Uptime</td><td>".$uptime."</td></tr>\n";
+$uptime = explode(' up ', $loadresult);
+$uptime = explode(',', $uptime[1]);
+$uptime = $uptime[0].', '.$uptime[1];
 
 //GET MEMORY DATA
-  $used = `free -m | grep "buffers/cache" | awk '{print $3}'`;
-  $totalram = chop(`free -m | grep Mem | awk '{print $2}'`);
-  $usedram_percent = round($used*100/$totalram);
-
-$data1 .= "<tr><td>Memory In Use	</td><td>$usedram_percent% (".$used."MB/".$totalram."MB)</td></tr>\n";
+$used = `free -m | grep "buffers/cache" | awk '{print $3}'`;
+$totalram = chop(`free -m | grep Mem | awk '{print $2}'`);
+$usedram_percent = round($used*100/$totalram);
 
 $rootfs = chop(`df -h | grep $root_partition | awk '{ print $5}'`);
 $rootfssize = chop(`df -h | grep $root_partition | awk '{print $2}'`);
 $rootfsused = chop(`df -h | grep $root_partition | awk '{print $3}'`);
-$data1 .= "<tr><td>Root	</td><td>$rootfs ($rootfsused/$rootfssize)</td></tr>\n";
 
-if (!empty($secondary)) {
-  $extfs = chop(`df -h | grep $secondary | awk '{ print $5}'`);
-  $extfssize = chop(`df -h | grep $secondary | awk '{print $2}'`);
-  $extfsused = chop(`df -h | grep $secondary | awk '{print $3}'`);
-  $data1 .= "<tr><td>Secondary	</td><td>$extfs ($extfsused/$extfssize)</td></tr>\n";
-}
+$extfs = chop(`df -h | grep $secondary | awk '{ print $5}'`);
+$extfssize = chop(`df -h | grep $secondary | awk '{print $2}'`);
+$extfsused = chop(`df -h | grep $secondary | awk '{print $3}'`);
 
-  
 //get ps data
-  $ps = (`ps aux | wc -l`)-1;
+$ps = (`ps aux | wc -l`)-1;
 
-$data1 .= "<tr><td>Server processes	</td><td>$ps Processes</td></tr>\n";  
-  
 //Get network connection total
 $numtcp = `netstat -nt | grep tcp | wc -l`;
 $numudp = `netstat -nu | grep udp | wc -l`;
-
-$data1 .= "<tr><td>Open Connections	</td><td>TCP: $numtcp\tUDP: $numudp</td></tr>\n";
 
 //Temperature value
 if ($degtype == "F") {
@@ -145,21 +130,31 @@ else{
 $degrees="&deg;C";
 }
 
-
 $cputemp= `cat /sys/class/thermal/thermal_zone0/temp`/1000;
 if ($degtype == "F") {
 $cputemp = $cputemp*9/5+32;
 }
 $cputemp= round(($cputemp), 1);
 
-$data1 .= "<tr><td>CPU Temp	</td><td>$cputemp $degrees</td></tr>\n";
-
 $gputemp= `temp | sed 's/temp=/\/' | sed 's/.C/\/'`;
 if ($degtype == "F") {
 $gputemp = $gputemp*9/5+32;
 }
 $gputemp= round(($gputemp), 1);
+
+$data1 = "<tr><td>Load Average </td><td>$avgs[1], $avgs[2], $avgs[3]</td>\n";
+$data1 .= "<tr><td>Server Uptime</td><td>".$uptime."</td></tr>\n";
+$data1 .= "<tr><td>Memory In Use	</td><td>$usedram_percent% (".$used."MB/".$totalram."MB)</td></tr>\n";
+$data1 .= "<tr><td>Root	</td><td>$rootfs ($rootfsused/$rootfssize)</td></tr>\n";
+if (!empty($secondary)) {
+  $data1 .= "<tr><td>Secondary	</td><td>$extfs ($extfsused/$extfssize)</td></tr>\n";
+}
+$data1 .= "<tr><td>Server processes	</td><td>$ps Processes</td></tr>\n";
+$data1 .= "<tr><td>Open Connections	</td><td>TCP: $numtcp\tUDP: $numudp</td></tr>\n";
+$data1 .= "<tr><td>CPU Temp	</td><td>$cputemp $degrees</td></tr>\n";
 //$data1 .= "<tr><td>GPU Temp</td><td>$gputemp $degrees</td></tr>\n";
+
+
 
 //Generate Links
 //<li><a href="/transmission">Transmission</a></li>
