@@ -22,19 +22,19 @@ $domain = "nichnologist.net";
 $services = Array(
 	Array("80", 				"Internet Connection", 				"google.com"),
 	Array("80",				"HTTP", 					""),
-//	Array("postfix",		 	"Postfix", 					""),
+	Array("postfix",		 	"Postfix", 					""),
 	Array("cron",				"Cron",						""),
-//	Array("3306", 				"MySQL", 					""),
+	Array("3306", 				"MySQL", 					""),
 	Array("445",				"Samba", 					""),
-//	Array("32400",				"Plex",						"localhost"),
-//	Array("21", 				"FTP", 						""),
+	Array("32400",				"Plex",						"localhost"),
+	Array("21", 				"FTP", 						""),
 	Array("22", 				"Internal SSH", 				""),
 	Array("22", 				"External SSH", 				"$hostname"),
-//	Array("transmission",			"Transmission", 				""),
+	Array("transmission",			"Transmission", 				""),
 	Array("3389",		 	        "XRDP (Remote Desktop)",			""),
 	Array("apache2",			"Apache2",					""),
 	Array("openvpn",			"Openvpn",					""),
-//	Array("631",                        	"CUPS", 					""),
+	Array("631",                        	"CUPS", 					""),
 );
 
 // Define Header Links
