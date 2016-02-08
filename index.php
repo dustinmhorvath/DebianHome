@@ -142,6 +142,8 @@ $gputemp = $gputemp*9/5+32;
 }
 $gputemp= round(($gputemp), 1);
 
+$pulldate = `git show --format='%ad' | grep "[0-9]:[0-9][0-9]:[0-9][0-9]"`;
+
 $data1 = "<tr><td>Load Average </td><td>$avgs[1], $avgs[2], $avgs[3]</td>\n";
 $data1 .= "<tr><td>Server Uptime</td><td>".$uptime."</td></tr>\n";
 $data1 .= "<tr><td>Memory In Use	</td><td>$usedram_percent% (".$used."MB/".$totalram."MB)</td></tr>\n";
@@ -152,6 +154,8 @@ if (!empty($secondary)) {
 $data1 .= "<tr><td>Server processes	</td><td>$ps Processes</td></tr>\n";
 $data1 .= "<tr><td>Open Connections	</td><td>TCP: $numtcp\tUDP: $numudp</td></tr>\n";
 $data1 .= "<tr><td>CPU Temp	</td><td>$cputemp $degrees</td></tr>\n";
+$data1 .= "<tr><td>Last Pull	</td><td>$pulldate</td></tr>\n";
+
 //$data1 .= "<tr><td>GPU Temp</td><td>$gputemp $degrees</td></tr>\n";
 
 
