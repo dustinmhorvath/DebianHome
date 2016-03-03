@@ -52,6 +52,7 @@ $links = Array(
 $degtype = "F";
 $root_partition = chop(` df | grep /$ | awk {'print $(NF-5)'} `);
 $hostname = gethostname();
+$osname = chop(` lsb_release -ic | grep "ID" | cut -d ":" -f 2 `);
 
 function microtime_float()
 {
