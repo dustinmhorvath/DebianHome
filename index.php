@@ -44,7 +44,7 @@ $links = Array(
 	Array("Google Cloud Print", 		"https:/\/www.google.com/cloudprint?user=0#printers"),
 	Array("RPi1 Status", 			"http:/\/rpi1.$domain/"),
 	Array("RPi2 Status", 			"http:/\/rpi2.$domain"),
-	Array("net Status", 			"http:/\/server.$domain"),
+	Array("net Status", 			"http:/\/net.$domain"),
 	Array("Gateway",			"https:/\/$domain:8080")
 );
 
