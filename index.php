@@ -40,11 +40,12 @@ $services = Array(
 // Define Header Links
 $links = Array(
 	Array("Transmission",			"http:/\/torrent.$domain"),
-	Array("Webmail", 			"http:/\/mail.$domain"),
+	//Array("Webmail", 			"http:/\/mail.$domain"),
 	Array("Google Cloud Print", 		"https:/\/www.google.com/cloudprint?user=0#printers"),
 	Array("RPi1 Status", 			"http:/\/rpi1.$domain/"),
-	Array("RPi2 Status", 			"http:/\/rpi2.$domain"),
+	//Array("RPi2 Status", 			"http:/\/rpi2.$domain"),
 	Array("net Status", 			"http:/\/net.$domain"),
+	Array("web Status", 			"http:/\/web.$domain"),
 	Array("Gateway",			"https:/\/$domain:8080")
 );
 
@@ -179,11 +180,11 @@ $linkdata .= "<li><a href='$link[1]'>$link[0]</a></li>";
   ================================================== -->
 	<meta charset="utf-8">
 	<title><?php echo $hostname; ?> Status</title>
-	
+
     <!-- Mobile Specific Metas
   ================================================== -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
+
     <!-- CSS
   ================================================== -->
 	<link rel="stylesheet" href="css/zerogrid.css">
